@@ -1,75 +1,15 @@
 workflows:
   android-workflow:
-    name: MOLE Mobile App Production Compiler
+    name: MOLE Native Kotlin Compiler
     max_build_duration: 60
     instance_type: mac_mini_m2
-    environment:
-      vars:
-        PACKAGE_NAME: "com.modach.mole"
-    triggering:
-      events:
-        - push
     scripts:
-      - name: Inject Android Manifest and SDK Directories
+      - name: Build Android Native APK
         script: |
-          echo "Initializing Modach Technologies structural branch nodes..."
-          mkdir -p app/src/main/java/com/modach/mole
-          mkdir -p app/src/main/res/values
-          
-          # Move your core code file into the precise package location
-          [ -f MainActivity.kt ] && mv MainActivity.kt app/src/main/java/com/modach/mole/MainActivity.kt
-          
-          # Force create standard strings layout resources
-          cat << 'EOF' > app/src/main/res/values/strings.xml
-          <resources><string name="app_name">MOLE: Personal Safety App</string></resources>
-          EOF
-
-          # Force build standard Android settings script files
-          cat << 'EOF' > settings.gradle
-          rootProject.name = 'Mole-App'
-          include ':app'
-          EOF
-          
-          # Generate main top-level gradle configuration lines
-          cat << 'EOF' > build.gradle
-          buildscript {
-              repositories { google(); mavenCentral() }
-              dependencies { 
-                  classpath 'com.android.tools.build:gradle:8.1.0'
-                  classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20'
-              }
-          }
-          allprojects { repositories { google(); mavenCentral() } }
-          EOF
-          
-          # Generate app-specific operational script modules
-          cat << 'EOF' > app/build.gradle
-          plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }
-          android {
-              namespace 'com.modach.mole'
-              compileSdk 33
-              defaultConfig { 
-                  applicationId 'com.modach.mole'
-                  minSdk 24
-                  targetSdk 33
-                  versionCode 1
-                  versionName '1.0'
-              }
-              buildTypes { release { minifyEnabled false } }
-              buildFeatures { compose true }
-              composeOptions { kotlinCompilerExtensionVersion '1.4.6' }
-          }
-          dependencies {
-              implementation 'androidx.core:core-ktx:1.10.1'
-              implementation 'androidx.activity:activity-compose:1.7.2'
-              implementation 'androidx.compose.ui:ui:1.4.3'
-              implementation 'androidx.compose.material3:material3:1.1.0'
-          }
-          EOF
-      - name: Force Execute Android Native Compiler Task
-        script: |
-          echo "Triggering native hardware sensor compilation metrics..."
-          gradle assembleDebug --no-daemon
+          echo "Compiling native sensor modules..."
+          # Generates a standard gradle wrapper on the cloud machine automatically
+          gradle wrapper --gradle-version 8.0
+          chmod +x gradlew
+          ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/apk/**/*.apk
-      - build/app/outputs/apk/**/*.apk
