@@ -2,13 +2,19 @@ workflows:
   android-workflow:
     name: MOLE Native Kotlin Compiler
     max_build_duration: 60
-    instance_type: linux
+    instance_type: mac_mini_m1
+    environment:
+      vars:
+        PACKAGE_NAME: "com.modach.mole"
     scripts:
-      - name: Build Android Native APK
+      - name: Compile Native Mobile APK File
         script: |
-          echo "Compiling native sensor modules on Linux framework..."
+          echo "Syncing Modach Technologies repository structure..."
+          # Generates a standard gradle wrapper on the cloud machine natively
           gradle wrapper --gradle-version 8.0
           chmod +x gradlew
+          
+          echo "Executing native compilation task..."
           ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/apk/**/*.apk
