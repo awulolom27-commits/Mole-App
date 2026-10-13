@@ -2,12 +2,11 @@ workflows:
   android-workflow:
     name: MOLE Native Kotlin Compiler
     max_build_duration: 60
-    instance_type: mac_mini_m2
+    instance_type: linux_standard
     scripts:
       - name: Build Android Native APK
         script: |
-          echo "Compiling native sensor modules..."
-          # Generates a standard gradle wrapper on the cloud machine automatically
+          echo "Compiling native sensor modules on Linux framework..."
           gradle wrapper --gradle-version 8.0
           chmod +x gradlew
           ./gradlew assembleDebug
